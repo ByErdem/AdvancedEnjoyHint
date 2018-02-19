@@ -1,6 +1,7 @@
 # AdvancedEnjoyHint
 This is an enhanced version of the enjoyhint.js plugin. I added labelColor and arrowColor features.
-But now, i need to add position features. In some cases i need to change the position of the label content.
+Also you can find objects in iframe. But now, i need to add position features. 
+In some cases i need to change the position of the label content.
 But this is currently very mixed. I could not fix yet. In this case, i need help from you. Maybe you can fix more fast.
 
 Features:
