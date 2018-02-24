@@ -17,13 +17,13 @@
         -moz-box-sizing: content-box
     }
 
-@font-face {
+/*@font-face {
     font-family: casino_handregular;
     src: url(Casino_Hand/casino_hand-webfont.eot);
     src: url(Casino_Hand/casino_hand-webfont.eot?#iefix)format('embedded-opentype'),url(Casino_Hand/casino_hand-webfont.woff)format('woff'),url(Casino_Hand/casino_hand-webfont.ttf)format('truetype'),url(Casino_Hand/casino_hand-webfont.svg#casino_handregular)format('svg');
     font-weight: 400;
     font-style: normal
-}
+}*/
 
 .enjoyhint {
     position: fixed;
@@ -272,13 +272,13 @@
     font-family: Arial
 }
 
-.enjoy_hint_label {
+/*.enjoy_hint_label {
     position: absolute;
     color: #fff;
     z-index: 107;
     font-size: 22px;
     font-family: casino_handregular,Arial
-}
+}*/
 
 div.kineticjs-content {
     position: absolute !important

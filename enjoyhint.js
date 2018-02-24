@@ -158,7 +158,19 @@ var EnjoyHint = function (_options) {
                         }
 
                     } else {
-                        $event_element.on(event, function (e) {
+
+                        //$event_element.on(event, function (e) {
+                        //    if (step_data.keyCode && e.keyCode != step_data.keyCode) {
+                        //        return;
+                        //    }
+                        //    current_step++;
+                        //    $(this).off(event);
+
+                        //    stepAction();
+                        //});
+
+
+                        $element.click(function (e) {
                             if (step_data.keyCode && e.keyCode != step_data.keyCode) {
                                 return;
                             }
@@ -201,7 +213,10 @@ var EnjoyHint = function (_options) {
                         margin: step_data.margin,
                         scroll: step_data.scroll,
                         arrowColor: step_data.arrowColor,
-                        labelColor: step_data.labelColor
+                        labelColor: step_data.labelColor,
+                        xPos: step_data.xPos,
+                        yPos: step_data.yPos,
+                        hideArrow: step_data.hideArrow
                     };
 
                     if (step_data.shape && step_data.shape == 'circle') {
@@ -657,6 +672,9 @@ var EnjoyHint = function (_options) {
                     };
                 };
                 that.renderArrow = function (data) {
+
+
+
                     var x_from = data.x_from || 0;
                     var y_from = data.y_from || 0;
                     var x_to = data.x_to || 0;
@@ -687,13 +705,13 @@ var EnjoyHint = function (_options) {
                     setTimeout(function () {
 
                         $('#enjoyhint_arrpw_line').remove();
-                        $('#polilyne101').css("stroke", "rgb(" + data.arrowColor + ")");
+                        $('#polilyne101').css("stroke", "rgba(" + (data.hideArrow == true ? "0,0,0,0" : data.arrowColor + ",1") + ")");
                         var d = 'M' + x_from + ',' + y_from + ' Q' + control_point_x + ',' + control_point_y + ' ' + x_to + ',' + y_to;
-                        that.$svg.append(makeSVG('path', { style: "fill:none; stroke:rgb(" + data.arrowColor + "); stroke-width:3", 'marker-end': "url(#arrowMarker)", d: d, id: 'enjoyhint_arrpw_line' }));
+                        that.$svg.append(makeSVG('path', { style: "fill:none; stroke:rgba(" + (data.hideArrow == true ? "0,0,0,0" : data.arrowColor + ",1") + "); stroke-width:3", 'marker-end': "url(#arrowMarker)", d: d, id: 'enjoyhint_arrpw_line' }));
                         that.enjoyhint.removeClass(that.cl.svg_transparent);
-                        $(".polilyne").css("stroke", "rgb(" + data.arrowColor + ")");
 
                     }, that.options.animation_time / 2);
+
                 };
 
 
@@ -704,7 +722,6 @@ var EnjoyHint = function (_options) {
                             'left': data.x + 'px'
                         })
                         .html(data.text).appendTo(that.enjoyhint);
-
                 };
 
 
@@ -838,30 +855,33 @@ var EnjoyHint = function (_options) {
                     }
 
                     var label_data = that.renderLabel({
-                        x: label_x,
-                        y: label_y,
+                        x: data.xPos != undefined ? data.xPos : label_x,
+                        y: data.yPos != undefined ? data.yPos : label_y,
                         text: data.text,
-                        labelColor:data.labelColor
+                        labelColor: data.labelColor
                     });
 
+
+
                     that.$next_btn.css({
-                        left: label_x,
-                        top: label_y + label_height + 20
+                        left: parseInt(returnPosition(data.xPos, data.yPos, label_x, label_y, label_height).x),
+                        top: parseInt(returnPosition(data.xPos, data.yPos, label_x, label_y, label_height).y)
                     });
                     var left_skip = label_x + that.$next_btn.width() + 10;
+
                     if (that.nextBtn == "hide") {
                         left_skip = label_x;
                     }
 
                     that.$skip_btn.css({
-                        left: left_skip,
-                        top: label_y + label_height + 20
+                        left: that.nextBtn != "hide" ? (data.xPos != undefined ? that.$next_btn.position().left + 120 : label_x + 120) : label_x,
+                        top: parseInt(returnPosition(data.xPos, data.yPos, label_x, label_y, label_height).y)
                     });
+
                     that.$close_btn.css({
                         right: 10,
                         top: 10
                     });
-
 
                     that.disableEventsNearRect({
                         top: shape_data.top,
@@ -896,6 +916,36 @@ var EnjoyHint = function (_options) {
                         conn_circle_side = c_s;
                         arrow_side = a_s;
                     }
+
+                    function returnPosition(data_xPos, data_yPos, label_x, label_y, label_height) {
+
+                        var xpos = 0;
+                        var ypos = 0;
+
+                        if (data_xPos != undefined) {
+                            xpos = parseInt(data_xPos);
+                        }
+                        else {
+                            xpos = parseInt(label_x);
+                        }
+
+                        if (data_yPos) {
+                            ypos = parseInt(data_yPos);
+                        }
+                        else {
+                            ypos = parseInt(label_y);
+                        }
+
+                        var result;
+
+                        result = {
+                            x: parseInt(xpos),
+                            y: parseInt(ypos + label_height + 20)
+                        }
+
+                        return result;
+                    }
+
 
                     function sideStatements(top_s, mid_top_s, mid_s, mid_bottom_s, bottom_s) {
                         var statement = [];
@@ -947,6 +997,8 @@ var EnjoyHint = function (_options) {
                     var label_conn_coordinates = label_data.conn[conn_label_side];
                     var circle_conn_coordinates = shape_data.conn[conn_circle_side];
                     var by_top_side = (arrow_side == 'top') ? true : false;
+
+
                     that.renderArrow({
                         x_from: label_conn_coordinates.x,
                         y_from: label_conn_coordinates.y,
@@ -954,8 +1006,12 @@ var EnjoyHint = function (_options) {
                         y_to: circle_conn_coordinates.y,
                         by_top_side: by_top_side,
                         arrowColor: data.arrowColor,
-                        labelColor: data.labelColor
+                        labelColor: data.labelColor,
+                        xPos: data.xPos,
+                        yPos: data.yPos,
+                        hideArrow: data.hideArrow
                     });
+
 
                 };
 
