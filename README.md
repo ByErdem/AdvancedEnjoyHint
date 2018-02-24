@@ -1,8 +1,5 @@
 # AdvancedEnjoyHint
-This is an enhanced version of the enjoyhint.js plugin. I added labelColor and arrowColor features.
-Also you can find objects in iframe. But now, i need to add position features. 
-In some cases i need to change the position of the label content.
-But this is currently very mixed. I could not fix yet. In this case, i need help from you. Maybe you can fix more fast.
+Finally I added change position of label content feature. For this you have to use xPos and yPos features. Also I added hideArrow feature too. Sometimes some divs couldn't find, but i don't know this why. Maybe you can find a solution. Thanks in advance.
 
 Features:
 
@@ -15,8 +12,17 @@ Features:
 			'next .navbar-brand' : 'Welcome to Turbo Search! Let me guide you through its features.',
 			'nextButton' : {className: "myNext", text: "Sure"},
 			'skipButton' : {className: "mySkip", text: "Nope!"},
-      'labelColor':'255,0,0',
-      'arrowColor':'0,0,255'
+		      	'labelColor':'255,0,0',
+		      	'arrowColor':'0,0,255'
+		  },
+		  {
+			'click #ASPxRoundPanel1_RPC': "<div style='color:black;'>Lütfen bu sayfadan bir klasör seçiniz</div>",
+			'arrowColor': '0,0,0',
+			"labelColor": '0,0,0',
+			"xPos": "500",
+			"yPos": "200",
+			"hideArrow": true,
+			'showSkip': false
 		  },
 		  {
 			'key #mySearchButton' : "Insert your search request and press 'Enter'",
